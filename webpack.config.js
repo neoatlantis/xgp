@@ -7,6 +7,7 @@ module.exports = [
     {
         entry: './xgp/index.js',
         mode: 'development',
+//        mode: 'production',
         output: {
             filename: 'xgp.js',
             path: output_path,
