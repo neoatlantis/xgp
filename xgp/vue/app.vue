@@ -4,16 +4,17 @@
     <Header></Header>
 
     <div class="row">
-        <div class="col-3">
+        <div class="col-lg-3 col-xl-2">
             <NavbarMain
                 :choice="navchoice"
                 @changed="on_navbar_changed"
             ></NavbarMain>
         </div>
-        <div class="col-9">
+        <div class="col-lg-9 col-xl-10">
 
             <Keymgr v-show="'keymgr'==navchoice"></Keymgr>
             
+            <Doc v-show="'doc'==navchoice"></Doc>
 
 
         </div>
@@ -28,13 +29,15 @@
 import Header from "./header.vue";
 import NavbarMain from "./navbar-main.vue";
 import Keymgr from "./keymgr/index.vue";
+import Doc from "./doc/index.vue";
 
 export default {
     
     components: {
         Header,
         NavbarMain,
-        Keymgr
+        Keymgr,
+        Doc
     },
 
     data: ()=> { return {

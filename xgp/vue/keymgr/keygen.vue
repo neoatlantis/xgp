@@ -1,4 +1,7 @@
-<template><form action="#" @submit.prevent="on_submit">
+<template><div>
+
+<!-- Input form for new key -->
+<form v-show="!generated" action="#" @submit.prevent="on_submit">
     <div class="form-group row">
         <label class="col-sm-4 col-form-label">Name</label>
         <div class="col-sm-8">
@@ -34,26 +37,73 @@
         </div>
     </div>
 
+    <div class="form-group">
+        <div class="col-sm-12 form-check">
+            <input type="checkbox" class="form-check-input" v-model="save_after_generation" id="inputSaveAfterGeneration" />
+            <label for="inputSaveAfterGeneration" class="form-check-label">
+                Save to keyring after generation</label>
+        </div>
+    </div>
+
     <div class="form-group row">
         <div class="col-sm-12">
             <button type="submit" class="btn btn-primary">Generate</button>
         </div>
     </div>
+</form>
 
 
-</form></template>
-<script>
+<!-- Result display -->
+<div v-show="generated">
+
+    <div>
+        Your new key pair was just generated.
+    </div>
+
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" href="#">Private Key</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Public Key</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Revocation Certificate</a>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" role="tabpanel">...</div>
+        <div class="tab-pane fade" role="tabpanel">...</div>
+        <div class="tab-pane fade" role="tabpanel">...</div>
+    </div>
+
+</div>
+
+
+
+
+
+
+</div></template> <script>
 import { generate_key } from "xgp/openpgp";
 
 
 export default {
 
     data(){ return {
-        username: "",
-        email: "",
-        password: "",
-        password2: "",
+        username: "John Doe",
+        email: "test@example.com",
+        password: "test",
+        password2: "test",
         algorithm: "ecc:curve25519",
+        save_after_generation: true,
+
+        generated: false,
+        privateKey: "",
+        publicKey: "",
+        revocationCertificate: "",
+
     } },
 
     computed: {
@@ -66,6 +116,9 @@ export default {
         reset(){
             this.username = this.email = this.password = this.password2 = "";
             this.algorithm = "ecc:curve25519";
+
+            this.generated = false;
+            this.privateKey = this.publicKey = this.revocationCertificate = "";
         },
 
 
@@ -88,9 +141,19 @@ export default {
                 options.rsaBits = parseInt(keyargv, 10);
             }
 
-            console.log(options);
             let result = await generate_key(options);
-            console.log(result);
+
+            if(result.isOk()){
+                let { publicKey, privateKey, revocationCertificate } = 
+                    result.value;
+                this.publicKey = publicKey;
+                this.privateKey = privateKey;
+                this.revocationCertificate = revocationCertificate;
+
+                this.generated = true;
+            } else {
+            }
+
         }
     },
 

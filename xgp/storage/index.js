@@ -41,7 +41,7 @@ async function length(){
     return localStorage.length;
 }
 
-export {
+export default {
     init,
     get, set, remove, key, length
 }

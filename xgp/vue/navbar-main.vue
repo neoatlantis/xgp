@@ -31,6 +31,7 @@ export default {
             { "text": "Key Management", value: "keymgr" },
             { "text": "New Message",    value: "newmsg" },
             { "text": "Read in a Message", value: "rdmsg" },
+            { "text": "Documentation", value: "doc" },
         ]
     } },
 
