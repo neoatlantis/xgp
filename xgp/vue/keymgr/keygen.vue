@@ -62,20 +62,26 @@
 
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link active" href="#">Private Key</a>
+            <a class="nav-link" :class='{active:0==result_tab}' @click="result_tab=0" href="#">Private Key</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Public Key</a>
+            <a class="nav-link" :class='{active:1==result_tab}' @click="result_tab=1" href="#">Public Key</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Revocation Certificate</a>
+            <a class="nav-link" :class='{active:2==result_tab}' @click="result_tab=2" href="#">Revocation Certificate</a>
         </li>
     </ul>
 
     <div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade show active" role="tabpanel">...</div>
-        <div class="tab-pane fade" role="tabpanel">...</div>
-        <div class="tab-pane fade" role="tabpanel">...</div>
+        <div class="tab-pane fade" :class='{show:0==result_tab,active:0==result_tab}' role="tabpanel">
+            <pre>{{ privateKey }}</pre>
+        </div>
+        <div class="tab-pane fade" :class='{show:1==result_tab,active:1==result_tab}' role="tabpanel">
+            <pre>{{ publicKey }}</pre>
+        </div>
+        <div class="tab-pane fade" :class='{show:2==result_tab,active:2==result_tab}' role="tabpanel">
+            <pre>{{ revocationCertificate }}</pre>
+        </div>
     </div>
 
 </div>
@@ -92,12 +98,14 @@ import { generate_key } from "xgp/openpgp";
 export default {
 
     data(){ return {
-        username: "John Doe",
-        email: "test@example.com",
-        password: "test",
-        password2: "test",
+        username: "",
+        email: "",
+        password: "",
+        password2: "",
         algorithm: "ecc:curve25519",
         save_after_generation: true,
+
+        result_tab: 0,
 
         generated: false,
         privateKey: "",
@@ -114,7 +122,11 @@ export default {
 
     methods: {
         reset(){
+            /// #if DEV
+            this.username = this.email = this.password = this.password2 = "test@test.com";
+            /// #else
             this.username = this.email = this.password = this.password2 = "";
+            /// #endif
             this.algorithm = "ecc:curve25519";
 
             this.generated = false;

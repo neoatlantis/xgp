@@ -22,6 +22,14 @@ module.exports = [
                 {
                     test: /\.vue$/,
                     loader: 'vue-loader'
+                },
+                {
+                    test: /\.(vue|js)$/,
+                    loader: 'ifdef-loader',
+                    exclude: /node_modules/,
+                    options: {
+                        DEV: true,
+                    }
                 }
             ]
         },
