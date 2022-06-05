@@ -11,6 +11,11 @@ module.exports = [
             filename: 'xgp.js',
             path: output_path,
         },
+        resolve: {
+            alias: {
+                xgp: path.resolve(__dirname, "xgp"),
+            },
+        },
         module: {
             rules: [
                 {

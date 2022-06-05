@@ -17,7 +17,7 @@
 
 
 <ClosableFrame title="Create new PGP key" v-show="show_create" @close="show_create=false">
-abc
+    <Keygen></Keygen>
 </ClosableFrame>
 
 
@@ -29,7 +29,9 @@ abc
 </div></template>
 <script>
 
-import ClosableFrame from "./closable-frame.vue";
+import ClosableFrame from "../closable-frame.vue";
+import Keygen from "./keygen.vue";
+
 export default {
 
     data(){ return {
@@ -49,7 +51,8 @@ export default {
     },
     
     components: {
-        ClosableFrame
+        ClosableFrame,
+        Keygen
     }
 }
 

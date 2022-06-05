@@ -13,6 +13,7 @@
   "author": "NeoAtlantis",
   "license": "GPL-3.0",
   "dependencies": {
+    "neverthrow": "^4.3.1",
     "vue": "^3.2.36",
     "vue-loader": "^17.0.0"
   },

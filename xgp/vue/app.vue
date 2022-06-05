@@ -27,7 +27,7 @@
 <script>
 import Header from "./header.vue";
 import NavbarMain from "./navbar-main.vue";
-import Keymgr from "./keymgr.vue";
+import Keymgr from "./keymgr/index.vue";
 
 export default {
     
