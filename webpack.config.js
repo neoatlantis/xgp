@@ -1,41 +1,62 @@
 const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader');
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CspHtmlWebpackPlugin = require('csp-html-webpack-plugin');
 
-const output_path = path.resolve(__dirname, 'dist');
+module.exports = (env)=>{
 
-module.exports = [
-    {
-        entry: './xgp/index.js',
-        mode: 'development',
-//        mode: 'production',
-        output: {
-            filename: 'xgp.js',
-            path: output_path,
-        },
-        resolve: {
-            alias: {
-                xgp: path.resolve(__dirname, "xgp"),
+    const is_dev = (env.production === undefined);
+    const output_path = path.resolve(__dirname, is_dev?'dev':'dist');
+
+
+    return [
+        {
+            entry: './xgp/index.js',
+            mode: is_dev?'development':'production',
+            output: {
+                filename: 'xgp.js',
+                path: output_path,
             },
-        },
-        module: {
-            rules: [
-                {
-                    test: /\.vue$/,
-                    loader: 'vue-loader'
+            resolve: {
+                alias: {
+                    xgp: path.resolve(__dirname, "xgp"),
                 },
-                {
-                    test: /\.(vue|js)$/,
-                    loader: 'ifdef-loader',
-                    exclude: /node_modules/,
-                    options: {
-                        DEV: true,
+            },
+            module: {
+                rules: [
+                    {
+                        test: /\.vue$/,
+                        loader: 'vue-loader'
+                    },
+                    {
+                        test: /\.(vue|js)$/,
+                        loader: 'ifdef-loader',
+                        exclude: /node_modules/,
+                        options: {
+                            DEV: is_dev,
+                        }
                     }
-                }
+                ]
+            },
+            plugins: [
+                new VueLoaderPlugin(),
+                new HtmlWebpackPlugin({
+                    template: "./xgp/index.html",
+                }),
+                new CspHtmlWebpackPlugin({
+                    'script-src': '',
+                    'style-src': ''
+                }, {
+                    enabled: !is_dev,
+
+                    hashingMethod: 'sha256',
+                    hashEnabled: {
+                        'script-src': true,
+                        'style-src': true,
+                    },
+                })
             ]
         },
-        plugins: [
-            new VueLoaderPlugin()
-        ]
-    },
-];
+    ];
 
+}; 
