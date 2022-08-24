@@ -1,4 +1,9 @@
-<template><div>
+<template><StandardWindow>
+
+<template #title>Key Management</template>
+
+
+
 
 <div class="row"><div class="col-12">
     <ul class="nav">
@@ -26,9 +31,10 @@
 
 
 
-</div></template>
+</StandardWindow></template>
 <script>
 
+import StandardWindow from "../windows/standard-window.vue";
 import ClosableFrame from "../closable-frame.vue";
 import Keygen from "./keygen.vue";
 
@@ -51,6 +57,7 @@ export default {
     },
     
     components: {
+        StandardWindow,
         ClosableFrame,
         Keygen
     }

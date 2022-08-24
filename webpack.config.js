@@ -13,6 +13,7 @@ module.exports = (env)=>{
         {
             entry: './xgp/index.js',
             mode: is_dev?'development':'production',
+            watch: is_dev,
             output: {
                 filename: 'xgp.js',
                 path: output_path,
