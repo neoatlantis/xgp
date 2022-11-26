@@ -1,4 +1,4 @@
-<template><StandardWindow>
+<template><StandardWindow ref="window">
 
 <template #title>Key Management</template>
 
@@ -41,12 +41,18 @@ import Keygen from "./keygen.vue";
 export default {
 
     data(){ return {
-        
+
         show_create: false,
         show_import: false,
         show_export: false,
 
     } },
+
+    methods: {
+        start(){
+            this.$refs["window"].show();
+        }
+    },
 
     computed: {
         ui_area_busy(){
@@ -55,7 +61,7 @@ export default {
             return this.show_create || this.show_import || this.show_export;
         }
     },
-    
+
     components: {
         StandardWindow,
         ClosableFrame,

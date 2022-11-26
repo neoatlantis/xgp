@@ -1,23 +1,10 @@
 <template>
-<div class="container-fluid">
+<div>
+    <Desktop @start="on_desktop_start" ></Desktop>
 
-    <Header></Header>
-
-    <div class="row">
-        <div class="col-lg-3 col-xl-2">
-            <NavbarMain
-                :choice="navchoice"
-                @changed="on_navbar_changed"
-            ></NavbarMain>
-        </div>
-        <div class="col-lg-9 col-xl-10">
-
-            <Keymgr v-show="'keymgr'==navchoice"></Keymgr>
-            
-            <Doc v-show="'doc'==navchoice"></Doc>
-
-
-        </div>
+    <div>
+        <Keymgr ref="keymgr"></Keymgr>
+        <Doc ref="doc"></Doc>
     </div>
 
 </div>
@@ -26,27 +13,25 @@
 
 
 <script>
-import Header from "./header.vue";
-import NavbarMain from "./navbar-main.vue";
+import Desktop from "./desktop.vue";
 import Keymgr from "./keymgr/index.vue";
 import Doc from "./doc/index.vue";
 
 export default {
-    
+
     components: {
-        Header,
-        NavbarMain,
+        Desktop,
         Keymgr,
         Doc
     },
 
     data: ()=> { return {
-        navchoice: "keymgr",
+
     } },
 
     methods: {
-        on_navbar_changed(choice){
-            this.navchoice = choice;
+        on_desktop_start(name){
+            this.$refs[name].start();
         }
     }
 }

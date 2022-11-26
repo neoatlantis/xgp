@@ -12,11 +12,12 @@
     :style='{
         left  : maximized ? `0` : `${window_x}px`,
         top   : maximized ? `0` : `${window_y}px`,
-        width : maximized ? `100%` : undefined,
+        width : maximized ? `100%` : (minimized ? `30em` : undefined),
         height: maximized ? `100%` : undefined,
         "z-index": z_index,
     }'
     ref="window"
+    v-show="visible"
 >
     <div
         class="title-bar" :class="$style.title_bar"
@@ -26,16 +27,17 @@
     >
         <div class="title-bar-text"><slot name="title"></slot></div>
         <div class="title-bar-controls">
-            <button aria-label="Minimize"></button>
-            <button aria-label="Maximize" @click="maximized=!maximized"></button>
-            <button aria-label="Close"></button>
+            <button aria-label="Minimize" @click="maximized=false; minimized=!minimized"></button>
+            <button aria-label="Maximize" @click="minimized=false; maximized=!maximized; (!maximized && center())"></button>
+            <button aria-label="Close" @click="visible=false"></button>
         </div>
     </div>
     <div
         class="window-body"
+        v-show="!minimized"
         :style='{
             height: maximized ? `calc(100% - 35px)` : `100%`,
-            width : maximized ? `calc(100% - 12px)` : `100%`,
+            width : `calc(100% - 12px)`,
         }'
     >
         <slot></slot>
@@ -51,6 +53,9 @@ export default {
     },
 
     data(){ return {
+        visible: false,
+
+        minimized: false,
         maximized: false,
         window_x: 0,
         window_y: 0,
@@ -63,16 +68,22 @@ export default {
 
     methods: {
 
+        show(){
+            this.visible = true;
+            this.position_init();
+        },
+
+        center(){
+            setTimeout(()=>{
+                let width  = this.$refs["window"].clientWidth,
+                    height = this.$refs["window"].clientHeight;
+                this.window_x = (window.innerWidth - width)/2;
+                this.window_y = (window.innerHeight - height)/2;
+            }, 0);
+        },
+
         position_init(){
-            let width  = this.$refs["window"].clientWidth,
-                height = this.$refs["window"].clientHeight;
-
-            console.log(width, height);
-
-            this.window_x = (window.innerWidth - width)/2;
-            this.window_y = (window.innerHeight - height)/2;
-
-            console.log(this.window_x);
+            this.center();
         },
 
         on_mousedown(e){
