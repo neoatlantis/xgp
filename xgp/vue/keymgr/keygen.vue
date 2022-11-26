@@ -56,33 +56,30 @@
 <!-- Result display -->
 <div v-show="generated">
 
-    <div>
-        Your new key pair was just generated.
-    </div>
+    Your new key pair was just generated.
+    <p />
 
-    <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link" :class='{active:0==result_tab}' @click="result_tab=0" href="#">Private Key</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" :class='{active:1==result_tab}' @click="result_tab=1" href="#">Public Key</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" :class='{active:2==result_tab}' @click="result_tab=2" href="#">Revocation Certificate</a>
-        </li>
-    </ul>
+    <section class="tabs" style="max-width: 500px">
+        <menu role="tablist" aria-label="Sample Tabs">
+            <button role="tab" @click="result_tab=0" aria-controls="tab-keygen-private-key" :aria-selected="0==result_tab">Private Key</button>
+            <button role="tab" @click="result_tab=1" aria-controls="tab-keygen-public-key"  :aria-selected="1==result_tab">Public Key</button>
+            <button role="tab" @click="result_tab=2" aria-controls="tab-keygen-revocation-cert" :aria-selected="2==result_tab">Revocation Certificate</button>
+        </menu>
 
-    <div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade" :class='{show:0==result_tab,active:0==result_tab}' role="tabpanel">
+        <article role="tabpanel" id="tab-keygen-private-key" :hidden="0!=result_tab">
             <pre>{{ privateKey }}</pre>
-        </div>
-        <div class="tab-pane fade" :class='{show:1==result_tab,active:1==result_tab}' role="tabpanel">
+        </article>
+
+        <article role="tabpanel" id="tab-keygen-public-key" :hidden="1!=result_tab">
             <pre>{{ publicKey }}</pre>
-        </div>
-        <div class="tab-pane fade" :class='{show:2==result_tab,active:2==result_tab}' role="tabpanel">
+        </article>
+
+        <article role="tabpanel" id="tab-keygen-revocation-cert" :hidden="2!=result_tab">
             <pre>{{ revocationCertificate }}</pre>
-        </div>
-    </div>
+        </article>
+
+    </section>
+
 
 </div>
 
@@ -156,7 +153,7 @@ export default {
             let result = await generate_key(options);
 
             if(result.isOk()){
-                let { publicKey, privateKey, revocationCertificate } = 
+                let { publicKey, privateKey, revocationCertificate } =
                     result.value;
                 this.publicKey = publicKey;
                 this.privateKey = privateKey;

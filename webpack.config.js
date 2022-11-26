@@ -2,6 +2,7 @@ const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CspHtmlWebpackPlugin = require('csp-html-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = (env)=>{
 
@@ -13,7 +14,7 @@ module.exports = (env)=>{
         {
             entry: './xgp/index.js',
             mode: is_dev?'development':'production',
-            watch: is_dev,
+            watch: true,
             output: {
                 filename: 'xgp.js',
                 path: output_path,
@@ -36,6 +37,24 @@ module.exports = (env)=>{
                         options: {
                             DEV: is_dev,
                         }
+                    },
+                    {
+                        test: /\.css$/,
+                        use: [
+                            'vue-style-loader',
+                            {
+                                loader: 'css-loader',
+                                options: {
+                                    // enable CSS Modules
+                                    modules: true,
+                                }
+                            }
+                        ],
+                    },
+                    {
+                        resourceQuery: /blockType=i18n/,
+                        type: 'javascript/auto',
+                        loader: '@intlify/vue-i18n-loader'
                     }
                 ]
             },
@@ -43,6 +62,14 @@ module.exports = (env)=>{
                 new VueLoaderPlugin(),
                 new HtmlWebpackPlugin({
                     template: "./xgp/index.html",
+                }),
+                new CopyPlugin({
+                    patterns: [
+                        {
+                            from: "./xgp/static/",
+                            to: path.join(output_path, "static"),
+                        }
+                    ]
                 }),
                 new CspHtmlWebpackPlugin({
                     'script-src': '',
@@ -60,4 +87,4 @@ module.exports = (env)=>{
         },
     ];
 
-}; 
+};
