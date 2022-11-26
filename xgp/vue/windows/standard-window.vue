@@ -46,6 +46,9 @@
 
 </template>
 <script>
+import { $desktop$ } from "xgp/channels";
+
+
 export default {
 
     mounted(){
@@ -61,9 +64,11 @@ export default {
         window_y: 0,
         z_index: 10,
 
-        titlebar_dragging: false,
+        titlebar_dragging_handle: false,
+        titlebar_dragging_mouseup_handle: false,
         titlebar_dragging_x0: 0,
         titlebar_dragging_y0: 0,
+
     }},
 
     methods: {
@@ -87,28 +92,58 @@ export default {
         },
 
         on_mousedown(e){
+            this.start_window_dragging(e);
             if(this.maximized){
-                this.titlebar_dragging = false;
+                this.stop_window_dragging();
                 return;
             }
-            this.titlebar_dragging = true;
-            this.titlebar_dragging_x0 = e.clientX;
-            this.titlebar_dragging_y0 = e.clientY;
-        },
-
-        on_mousemove(e){
-            if(this.maximized) return;
-            if(!this.titlebar_dragging) return;
-            let dx = e.clientX - this.titlebar_dragging_x0,
-                dy = e.clientY - this.titlebar_dragging_y0;
-            this.window_x += dx;
-            this.window_y += dy;
-            this.titlebar_dragging_x0 = e.clientX;
-            this.titlebar_dragging_y0 = e.clientY;
+            e.stopPropagation();
         },
 
         on_mouseup(e){
-            this.titlebar_dragging = false;
+            this.stop_window_dragging();
+            e.stopPropagation();
+        },
+
+        on_mousemove(e){
+            if(false === this.titlebar_dragging_handle) return;
+            this.move_window_by_xy({ x: e.clientX, y: e.clientY });
+            e.stopPropagation();
+        },
+
+        move_window_by_xy({x, y}){
+            let dx = x - this.titlebar_dragging_x0,
+                dy = y - this.titlebar_dragging_y0;
+            this.window_x += dx;
+            this.window_y += dy;
+            this.titlebar_dragging_x0 = x;
+            this.titlebar_dragging_y0 = y;
+        },
+
+        start_window_dragging(e){
+            this.titlebar_dragging_handle = $desktop$.subscribe(
+                "mousemove",
+                ({x, y})=> this.move_window_by_xy({x, y})
+            );
+            this.titlebar_dragging_mouseup_handle = $desktop$.subscribe(
+                "mouseup",
+                ()=>{
+                    this.stop_window_dragging();
+                }
+            );
+            this.titlebar_dragging_x0 = e.clientX;
+            this.titlebar_dragging_y0 = e.clientY;
+        },
+
+        stop_window_dragging(){
+            if(this.titlebar_dragging_handle.unsubscribe){
+                this.titlebar_dragging_handle.unsubscribe();
+                this.titlebar_dragging_handle = false;
+            }
+            if(this.titlebar_dragging_mouseup_handle.unsubscribe){
+                this.titlebar_dragging_mouseup_handle.unsubscribe();
+                this.titlebar_dragging_mouseup_handle = false;
+            }
         }
     }
 

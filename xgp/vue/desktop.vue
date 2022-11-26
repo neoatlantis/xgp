@@ -51,7 +51,12 @@
 
 <template>
 
-<div :class="$style.desktop">
+<div
+    :class="$style.desktop"
+    @mousemove="on_mousemove"
+    @mouseup="on_mouseup"
+    @mousedown="on_mousedown"
+>
     <div class="icons-desktop">
         <div
             v-for="item in items"
@@ -80,6 +85,10 @@
 
 
 <script>
+import { $desktop$ } from "xgp/channels";
+
+
+
 export default {
 
     props: ["choice"],
@@ -97,7 +106,18 @@ export default {
 
         on_icon_clicked(e){
             this.$emit("start", e);
-        }
+        },
+
+        on_mouseup(e){
+            $desktop$.publish("mouseup", { x: e.clientX, y: e.clientY });
+        },
+        on_mousedown(e){
+            $desktop$.publish("mousedown", { x: e.clientX, y: e.clientY });
+        },
+        on_mousemove(e){
+            $desktop$.publish("mousemove", { x: e.clientX, y: e.clientY });
+        },
+
 
     }
 
