@@ -1,3 +1,17 @@
+<i18n>{
+    zh: {
+        ADD: "添加",
+        DELETE: "删除",
+        SELECT_ALL: "全部选中",
+        UNSELECT_ALL: "全都不选",
+    },
+    en: {
+        ADD: "Add",
+        DELETE: "Delete",
+        SELECT_ALL: "Select All",
+        UNSELECT_ALL: "Select None",
+    }
+}</i18n>
 <style module>
 .buttons_vertical_container{
     display: flex;
@@ -28,10 +42,10 @@
         </template>
         <template #right>
             <div :class="$style.buttons_vertical_container">
-                <button @click="selected=options.map((_,i)=>i)">Select all</button>
-                <button @click="selected=[]">Unselect all</button>
-                <button @click="$emit('add')">Add</button>
-                <button @click="on_delete" :disabled="selected.length<1">Delete</button>
+                <button @click="selected=options.map((_,i)=>i)">{{$t('SELECT_ALL')}}</button>
+                <button @click="selected=[]">{{$t('UNSELECT_ALL')}}</button>
+                <button @click="$emit('add')">{{$t('ADD')}}</button>
+                <button @click="on_delete" :disabled="selected.length<1">{{$t('DELETE')}}</button>
             </div>
         </template>
     </TwoColumnLayout>

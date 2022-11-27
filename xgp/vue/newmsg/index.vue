@@ -116,7 +116,11 @@ export default {
             let buttons = ['next', 'back', 'cancel'];
             let ret = {
                 buttons: buttons,
-                next_button_skip: (this.recipients.length == 0 && this.passwords.length == 0),
+                next_button_skip: (
+                    this.step == 'encrypt' &&
+                    this.recipients.length == 0 &&
+                    this.passwords.length == 0
+                ),
                 next_button: true,
                 back_button: true,
                 cancel_button: true,

@@ -1,10 +1,14 @@
+<i18n>{
+    zh: {
+        TITLE: "这份消息需要保密吗?",
+    },
+    en: {
+        TITLE: "Shall we keep this message secret?",
+    }
+}</i18n>
 <template>
 <div>
-    <div>
-        Create a new message.
-        <br />
-        You can encrypt and/or sign this message.
-    </div>
+    <Headline>{{$t('TITLE')}}</Headline>
 
     <p />
 
@@ -35,6 +39,7 @@
 </template>
 <script>
 import prompt_password from "xgp/ui/prompt_password";
+import Headline from "sfc/windows/headline.vue";
 import TwoColumnAddDeleteList from "sfc/windows/two-column-add-delete-list.vue";
 
 export default {
@@ -59,7 +64,7 @@ export default {
         }
     },
     components: {
-        TwoColumnAddDeleteList,
+        TwoColumnAddDeleteList, Headline,
     }
 }
 </script>
