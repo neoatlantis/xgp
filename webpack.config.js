@@ -22,6 +22,7 @@ module.exports = (env)=>{
             resolve: {
                 alias: {
                     xgp: path.resolve(__dirname, "xgp"),
+                    sfc: path.resolve(__dirname, "xgp", "vue"),
                 },
             },
             module: {

@@ -1,3 +1,14 @@
+<i18n>{
+    zh: {
+        KEYMGR: "密钥管理",
+        NEWMSG: "创建消息",
+    },
+
+    en: {
+        KEYMGR: "Key Management",
+        NEWMSG: "New Message",
+    }
+}</i18n>
 <style module>
 .desktop {
   background-color: #3b6ea5;
@@ -15,6 +26,8 @@
   text-align: center;
   margin-bottom: 32px;
   color: white;
+  user-select: none;
+  --webkit-user-select: none;
 }
 
 .icon-desktop a {
@@ -64,7 +77,7 @@
             @dblclick="on_icon_clicked(item.value)"
         >
             <div><img v-if="item.icon" :src="'./static/' + item.icon" /></div>
-            {{ item.text }}
+            {{ $t(item.text) }}
         </div>
     </div>
 </div>
@@ -95,8 +108,8 @@ export default {
 
     data: ()=>{ return {
         items: [
-            { "text": "Key Management", icon: "icon-doc.svg", value: "keymgr" },
-            { "text": "New Message", icon: "icon-doc.svg", value: "newmsg" },
+            { "text": "KEYMGR", icon: "icon-doc.svg", value: "keymgr" },
+            { "text": "NEWMSG", icon: "icon-doc.svg", value: "newmsg" },
             { "text": "Read in a Message", icon: "icon-doc.svg", value: "rdmsg" },
             { "text": "Documentation", icon: "icon-doc.svg", value: "doc" },
         ]

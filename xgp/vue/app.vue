@@ -4,6 +4,7 @@
 
     <div>
         <Keymgr ref="keymgr"></Keymgr>
+        <Newmsg ref="newmsg"></Newmsg>
         <Doc ref="doc"></Doc>
     </div>
 
@@ -15,6 +16,7 @@
 <script>
 import Desktop from "./desktop.vue";
 import Keymgr from "./keymgr/index.vue";
+import Newmsg from "./newmsg/index.vue";
 import Doc from "./doc/index.vue";
 
 export default {
@@ -22,7 +24,8 @@ export default {
     components: {
         Desktop,
         Keymgr,
-        Doc
+        Newmsg,
+        Doc,
     },
 
     data: ()=> { return {

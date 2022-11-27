@@ -8,27 +8,28 @@
 
 <div
     class="window"
-    :class="$style.window"
+    :class="[$style.window, has_focus?'active':'']"
     :style='{
         left  : maximized ? `0` : `${window_x}px`,
         top   : maximized ? `0` : `${window_y}px`,
-        width : maximized ? `100%` : (minimized ? `30em` : undefined),
+        width : maximized ? `100%` : (minimized ? `30em` : this.normal_width ),
         height: maximized ? `100%` : undefined,
-        "z-index": z_index,
+        "z-index": has_focus ? 20 : 10,
     }'
     ref="window"
     v-show="visible"
 >
     <div
         class="title-bar" :class="$style.title_bar"
+        @click="focus"
         @mousedown="on_mousedown"
         @mouseup="on_mouseup"
         @mousemove="on_mousemove"
     >
         <div class="title-bar-text"><slot name="title"></slot></div>
         <div class="title-bar-controls">
-            <button aria-label="Minimize" @click="maximized=false; minimized=!minimized"></button>
-            <button aria-label="Maximize" @click="minimized=false; maximized=!maximized; (!maximized && center())"></button>
+            <button v-if="minimize_button" aria-label="Minimize" @click="maximized=false; minimized=!minimized"></button>
+            <button v-if="maximize_button" aria-label="Maximize" @click="minimized=false; maximized=!maximized; (!maximized && center())"></button>
             <button aria-label="Close" @click="visible=false"></button>
         </div>
     </div>
@@ -46,23 +47,43 @@
 
 </template>
 <script>
+import { v4 as uuidv4 } from 'uuid';
 import { $desktop$ } from "xgp/channels";
 
 
 export default {
 
+    props: {
+        normal_width: {
+            default: "30em",
+        },
+        maximize_button: {
+            type: Boolean,
+            default: true,
+        },
+        minimize_button: {
+            type: Boolean,
+            default: true,
+        }
+    },
+
     mounted(){
         setTimeout(()=>this.position_init(), 0);
+
+        $desktop$.subscribe("window.focus", (uuid)=>{
+            this.has_focus = (uuid == this.uuid);
+        })
     },
 
     data(){ return {
+        uuid: uuidv4(),
+        has_focus: false,
         visible: false,
 
         minimized: false,
         maximized: false,
         window_x: 0,
         window_y: 0,
-        z_index: 10,
 
         titlebar_dragging_handle: false,
         titlebar_dragging_mouseup_handle: false,
@@ -76,6 +97,15 @@ export default {
         show(){
             this.visible = true;
             this.position_init();
+            this.focus();
+        },
+
+        hide(){
+            this.visible = false;
+        },
+
+        focus(){
+            $desktop$.publish("window.focus", this.uuid);
         },
 
         center(){
