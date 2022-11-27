@@ -19,15 +19,8 @@
         P4: "Encryption and signature are independent options. You may choose either or both. In the following steps, you will be prompted for more details.",
     }
 }</i18n>
-
-<style module>
-.headline{
-    font-size: 1.4em;
-    color: #3b6ea5;
-}
-</style>
 <template>
-    <span :class="$style.headline">{{$t('HEADLINE')}}</span>
+    <Headline>{{$t('HEADLINE')}}</Headline>
     <p />
     {{$t('P1')}}
     <p />
@@ -37,3 +30,7 @@
     <p />
     {{$t("P4")}}
 </template>
+<script>
+import Headline from "sfc/windows/headline.vue";
+export default { components: { Headline }};
+</script>

@@ -14,10 +14,10 @@
         top   : maximized ? `0` : `${window_y}px`,
         width : maximized ? `100%` : (minimized ? `30em` : this.normal_width ),
         height: maximized ? `100%` : undefined,
-        "z-index": has_focus ? 20 : 10,
+        "z-index": has_focus ? this.z_index+10 : this.z_index,
     }'
     ref="window"
-    v-show="visible"
+    v-show="always_visible || visible"
 >
     <div
         class="title-bar" :class="$style.title_bar"
@@ -30,7 +30,7 @@
         <div class="title-bar-controls">
             <button v-if="minimize_button" aria-label="Minimize" @click="maximized=false; minimized=!minimized"></button>
             <button v-if="maximize_button" aria-label="Maximize" @click="minimized=false; maximized=!maximized; (!maximized && center())"></button>
-            <button aria-label="Close" @click="visible=false"></button>
+            <button v-if="close_button"    aria-label="Close" @click="visible=false"></button>
         </div>
     </div>
     <div
@@ -54,7 +54,12 @@ import { $desktop$ } from "xgp/channels";
 export default {
 
     props: {
+        always_visible: {
+            type: Boolean,
+            default: false,
+        },
         normal_width: {
+            type: String,
             default: "30em",
         },
         maximize_button: {
@@ -64,7 +69,19 @@ export default {
         minimize_button: {
             type: Boolean,
             default: true,
-        }
+        },
+        close_button: {
+            type: Boolean,
+            default: true,
+        },
+        draggable: {
+            type: Boolean,
+            default: true,
+        },
+        z_index: {
+            type: Number,
+            default: 20,
+        },
     },
 
     mounted(){
@@ -151,6 +168,7 @@ export default {
         },
 
         start_window_dragging(e){
+            if(!this.draggable) return;
             this.titlebar_dragging_handle = $desktop$.subscribe(
                 "mousemove",
                 ({x, y})=> this.move_window_by_xy({x, y})

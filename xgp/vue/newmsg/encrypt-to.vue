@@ -34,6 +34,7 @@
 
 </template>
 <script>
+import prompt_password from "xgp/ui/prompt_password";
 import TwoColumnAddDeleteList from "sfc/windows/two-column-add-delete-list.vue";
 
 export default {
@@ -58,8 +59,18 @@ export default {
         on_add_recipient(){
 
         },
-        on_add_password(){
-            alert('pwd');
+        async on_add_password(){
+            let password = null;
+            try{
+                password = await prompt_password({});
+                if(null === password) return;
+            } catch(e){
+                return;
+            }
+            this.passwords.push({
+                text: "Password",
+                value: password,
+            });
         }
     },
     components: {
