@@ -9,10 +9,11 @@
 }</i18n>
 <style module>
 .modal_background{
-    background-color: #FFFFFFCC;
+    background-color: #3b6ea5ee;
     z-index: 1000;
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
+    backdrop-filter: blur(3px);
 }
 </style>
 <template>
