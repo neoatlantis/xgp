@@ -14,6 +14,7 @@
     :next_button_skip="wizard_buttons.next_button_skip"
     :back_button="wizard_buttons.back_button"
     :cancel_button="wizard_buttons.cancel_button"
+    :cancel_button_done="wizard_buttons.cancel_button_done"
 
     @clicked="on_wizard_button_clicked"
 >
@@ -28,12 +29,26 @@
         @passwords="passwords=$event"
         @recipients="recipients=$event"
     ></EncryptTo>
-
-
-
-
-
-
+    <SignWith
+        v-if="'sign'==step"
+        :signers="signers"
+        @signers="signers=$event"
+    ></SignWith>
+    <Compose
+        v-if="'compose'==step"
+        :will_encrypt="recipients.length>0||passwords.length>0"
+        :will_sign="signers.length>0"
+        :message="message"
+        @message="message=$event"
+    ></Compose>
+    <Result ref="result"
+        v-if="'result'==step"
+        :passwords="passwords"
+        :recipients="recipients"
+        :signers="signers"
+        :message="message"
+        @center="$refs.window.center()"
+    ></Result>
 </div>
 </Wizard></template>
 <script>
@@ -41,31 +56,26 @@ import Wizard from "sfc/windows/wizard.vue";
 
 import Intro from "./intro.vue";
 import EncryptTo from "./encrypt-to.vue";
+import SignWith from "./sign-with.vue";
+import Compose from "./compose.vue";
+import Result from "./result.vue";
 
 function new_data(){ return {
     step: "intro",
     /// #if DEV
-    step: "encrypt",
+    step: "compose",
     /// #endif
 
-
     recipients: [
-        { text: "Recipient 1" },
-        { text: "Recipient 2" },
-        { text: "Recipient 3" },
-        { text: "Recipient 4" },
-        { text: "Recipient 1" },
-        { text: "Recipient 1" },
-        { text: "Recipient 1" },
-        { text: "Recipient 1" },
-        { text: "Recipient 1" },
-        { text: "Recipient 1" },
     ],
     passwords: [
         /// #if DEV
         { text: "test", value: "password" },
         /// #endif
     ],
+    signers: [],
+
+    message: "",
 }}
 
 
@@ -85,7 +95,14 @@ export default {
         move_next(){
             switch(this.step){
                 case "intro":
-                    this.step = 'encrypt';
+                    this.step = 'encrypt'; break;
+                case "encrypt":
+                    this.step = "sign"; break;
+                case "sign":
+                    this.step = "compose"; break;
+                case "compose":
+                    this.step = "result";
+                    setTimeout(()=>this.generate(), 0);
                     break;
             }
         },
@@ -94,6 +111,12 @@ export default {
             switch (this.step) {
                 case "encrypt":
                     this.step = "intro"; break;
+                case "sign":
+                    this.step = "encrypt"; break;
+                case "compose":
+                    this.step = "sign"; break;
+                case "result":
+                    this.step = "compose"; break;
             }
         },
 
@@ -108,6 +131,10 @@ export default {
             }
             this.$refs["window"].center();
         },
+
+        generate(){
+            this.$refs["result"].generate();
+        },
     },
 
     computed: {
@@ -117,19 +144,20 @@ export default {
             let ret = {
                 buttons: buttons,
                 next_button_skip: (
-                    this.step == 'encrypt' &&
-                    this.recipients.length == 0 &&
-                    this.passwords.length == 0
+                    (
+                        this.step == 'encrypt' &&
+                        this.recipients.length == 0 &&
+                        this.passwords.length == 0
+                    ) || (
+                        this.step == 'sign' &&
+                        this.signers.length == 0
+                    )
                 ),
-                next_button: true,
-                back_button: true,
+                next_button: (this.step != "result"),
+                back_button: (this.step != "intro"),
                 cancel_button: true,
+                cancel_button_done: (this.step == "result"),
             };
-
-            switch(this.step){
-                case 'intro':
-                    ret.back_button = false; break;
-            }
             return ret;
         }
 
@@ -137,7 +165,7 @@ export default {
 
     components: {
         Wizard,
-        Intro, EncryptTo,
+        Intro, EncryptTo, SignWith, Compose, Result,
     }
 }
 

@@ -44,7 +44,7 @@
             <div :class="$style.buttons_vertical_container">
                 <button @click="selected=options.map((_,i)=>i)">{{$t('SELECT_ALL')}}</button>
                 <button @click="selected=[]">{{$t('UNSELECT_ALL')}}</button>
-                <button @click="$emit('add')">{{$t('ADD')}}</button>
+                <button v-if="add_button" @click="$emit('add')">{{$t('ADD')}}</button>
                 <button @click="on_delete" :disabled="selected.length<1">{{$t('DELETE')}}</button>
             </div>
         </template>
@@ -61,6 +61,10 @@ export default {
         },
         height: {
             default: "10em",
+        },
+        add_button: {
+            default: true,
+            type: Boolean,
         }
     },
 

@@ -4,12 +4,14 @@
         NEXT: "下一步",
         SKIP: "跳过",
         CANCEL: "取消",
+        DONE: "完成",
     },
     en: {
         BACK: "Back",
         NEXT: "Next",
         SKIP: "Skip",
         CANCEL: "Cancel",
+        DONE: "Done",
     }
 }</i18n>
 <style module>
@@ -41,7 +43,9 @@
         <button v-if="buttons.indexOf('next')>=0"   :disabled="!next_button"  :class="$style.step_button" @click="on_button_clicked('next')">
             {{next_button_skip ? $t("SKIP") : $t('NEXT')}} &gt;
         </button>
-        <button v-if="buttons.indexOf('cancel')>=0" :disabled="!cancel_button" :class="$style.step_button" @click="on_button_clicked('cancel')">{{$t('CANCEL')}}</button>
+        <button v-if="buttons.indexOf('cancel')>=0" :disabled="!cancel_button" :class="$style.step_button" @click="on_button_clicked('cancel')">
+            {{cancel_button_done ? $t('DONE') : $t('CANCEL')}}
+        </button>
     </div>
 
 
@@ -59,6 +63,7 @@ export default {
         next_button: { type: Boolean, default: true, },
         back_button: { type: Boolean, default: true, },
         cancel_button: { type: Boolean, default: true, },
+        cancel_button_done: { type: Boolean, default: false },
     },
 
     data(){ return {
