@@ -11,6 +11,7 @@
     ref="window" normal_width="50vw"
     :buttons="wizard_buttons.buttons"
     :next_button="wizard_buttons.next_button"
+    :next_button_skip="wizard_buttons.next_button_skip"
     :back_button="wizard_buttons.back_button"
     :cancel_button="wizard_buttons.cancel_button"
 
@@ -20,7 +21,13 @@
 <div style="padding: 20px">
 
     <Intro v-if="'intro'==step"></Intro>
-    <EncryptTo v-if="'encrypt'==step"></EncryptTo>
+    <EncryptTo
+        v-if="'encrypt'==step"
+        :passwords="passwords"
+        :recipients="recipients"
+        @passwords="passwords=$event"
+        @recipients="recipients=$event"
+    ></EncryptTo>
 
 
 
@@ -37,6 +44,28 @@ import EncryptTo from "./encrypt-to.vue";
 
 function new_data(){ return {
     step: "intro",
+    /// #if DEV
+    step: "encrypt",
+    /// #endif
+
+
+    recipients: [
+        { text: "Recipient 1" },
+        { text: "Recipient 2" },
+        { text: "Recipient 3" },
+        { text: "Recipient 4" },
+        { text: "Recipient 1" },
+        { text: "Recipient 1" },
+        { text: "Recipient 1" },
+        { text: "Recipient 1" },
+        { text: "Recipient 1" },
+        { text: "Recipient 1" },
+    ],
+    passwords: [
+        /// #if DEV
+        { text: "test", value: "password" },
+        /// #endif
+    ],
 }}
 
 
@@ -87,6 +116,7 @@ export default {
             let buttons = ['next', 'back', 'cancel'];
             let ret = {
                 buttons: buttons,
+                next_button_skip: (this.recipients.length == 0 && this.passwords.length == 0),
                 next_button: true,
                 back_button: true,
                 cancel_button: true,

@@ -47,12 +47,12 @@
     <br />
     <div v-if="require_repeat" class="field-row-stacked" style="width: 100%">
         <label for="password-prompt-input2">Repeat Password:</label>
-        <input id="password-prompt-input2" type="password" />
+        <input id="password-prompt-input2" type="password" v-model="password2"/>
     </div>
 
     <hr />
     <div style="text-align:right">
-        <button type="submit" @click="ok">OK</button>
+        <button type="submit" :disabled="!maybe_ok" @click="ok">OK</button>
         <button @click="cancel" style="margin-left: 5px">Cancel</button>
     </div>
 
@@ -78,11 +78,12 @@ export default {
         visible: false,
         require_repeat: false,
         password: "",
+        password2: "",
     } },
 
     methods: {
         reset(){
-            this.password = "";
+            this.password = this.password2 = "";
             this.visible = false;
         },
 
@@ -108,8 +109,13 @@ export default {
             $desktop$.publish("password.result", null);
             this.reset();
         }
+    },
 
-
+    computed: {
+        maybe_ok(){
+            if(this.password == "") return false;
+            return this.password == this.password2;
+        }
     },
 
     components: {

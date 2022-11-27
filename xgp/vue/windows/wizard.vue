@@ -2,11 +2,13 @@
     zh: {
         BACK: "上一步",
         NEXT: "下一步",
+        SKIP: "跳过",
         CANCEL: "取消",
     },
     en: {
         BACK: "Back",
-        NEXT:" Next",
+        NEXT: "Next",
+        SKIP: "Skip",
         CANCEL: "Cancel",
     }
 }</i18n>
@@ -36,7 +38,9 @@
 
     <div :class="$style.bottom_area">
         <button v-if="buttons.indexOf('back')>=0"   :disabled="!back_button"  :class="$style.step_button" @click="on_button_clicked('back')">&lt; {{$t('BACK')}}</button>
-        <button v-if="buttons.indexOf('next')>=0"   :disabled="!next_button"  :class="$style.step_button" @click="on_button_clicked('next')">{{$t('NEXT')}} &gt;</button>
+        <button v-if="buttons.indexOf('next')>=0"   :disabled="!next_button"  :class="$style.step_button" @click="on_button_clicked('next')">
+            {{next_button_skip ? $t("SKIP") : $t('NEXT')}} &gt;
+        </button>
         <button v-if="buttons.indexOf('cancel')>=0" :disabled="!cancel_button" :class="$style.step_button" @click="on_button_clicked('cancel')">{{$t('CANCEL')}}</button>
     </div>
 
@@ -51,6 +55,7 @@ export default {
             default: ["next", "back", "cancel"]
         },
 
+        next_button_skip: { type: Boolean, default: false },
         next_button: { type: Boolean, default: true, },
         back_button: { type: Boolean, default: true, },
         cancel_button: { type: Boolean, default: true, },
