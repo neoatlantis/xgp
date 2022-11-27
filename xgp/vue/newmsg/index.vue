@@ -8,7 +8,7 @@
     }
 }</i18n>
 <template><Wizard
-    ref="window" normal_width="40vw"
+    ref="window" normal_width="50vw"
     :buttons="wizard_buttons.buttons"
     :next_button="wizard_buttons.next_button"
     :back_button="wizard_buttons.back_button"

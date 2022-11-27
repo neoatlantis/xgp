@@ -1,10 +1,3 @@
-<style module>
-.buttons_vertical_container{
-    display: flex;
-    flex-direction: column;
-    padding-left: 10px; padding-right: 10px;
-}
-</style>
 <template>
 <div>
     <div>
@@ -15,66 +8,62 @@
 
     <p />
 
-    <div class="field-row-stacked">
-        Encrypt for following named recipients:<br />
-
-        <TwoColumnLayout weight_left="4" weight_right="1">
-            <template #left>
-                <ul role="listbox" style="height: 10em; overflow-y: scroll">
-                  <li role="option">Facebook</li>
-                  <li role="option">Apple</li>
-                  <li role="option">Netflix</li>
-                  <li role="option">Google</li>
-                  <li role="option">Facebook</li>
-                  <li role="option">Apple</li>
-                  <li role="option">Netflix</li>
-                  <li role="option">Google</li>
-                </ul>
-            </template>
-            <template #right>
-                <div :class="$style.buttons_vertical_container">
-                    <button>Add</button>
-                    <button>Delete</button>
-                </div>
-            </template>
-        </TwoColumnLayout>
+    <div>
+        Encrypt for following named recipients:<p />
+        <TwoColumnAddDeleteList
+            :options="recipients"
+            @changed="recipients=$event"
+            @add="on_add_recipient"
+        >
+        </TwoColumnAddDeleteList>
     </div>
 
+    <p />
 
-    <div class="field-row-stacked">
-        Encrypt with following password(s):<br />
+    <div>
+        Encrypt with following password(s):<p />
 
-        <TwoColumnLayout weight_left="4" weight_right="1">
-            <template #left>
-                <ul role="listbox" style="height: 10em; overflow-y: scroll">
-                  <li role="option">Facebook</li>
-                  <li role="option">Apple</li>
-                  <li role="option">Netflix</li>
-                  <li role="option">Google</li>
-                  <li role="option">Facebook</li>
-                  <li role="option">Apple</li>
-                  <li role="option">Netflix</li>
-                  <li role="option">Google</li>
-                </ul>
-            </template>
-            <template #right>
-                <div :class="$style.buttons_vertical_container">
-                    <button>Add</button>
-                    <button>Delete</button>
-                </div>
-            </template>
-        </TwoColumnLayout>
-
+        <TwoColumnAddDeleteList
+            :options="passwords"
+            @changed="passwords=$event"
+            @add="on_add_password"
+        >
+        </TwoColumnAddDeleteList>
     </div>
 </div>
 
 </template>
 <script>
-import TwoColumnLayout from "sfc/windows/two-column-layout.vue";
+import TwoColumnAddDeleteList from "sfc/windows/two-column-add-delete-list.vue";
 
 export default {
+    data(){ return {
+        recipients: [
+            { text: "Recipient 1" },
+            { text: "Recipient 2" },
+            { text: "Recipient 3" },
+            { text: "Recipient 4" },
+            { text: "Recipient 1" },
+            { text: "Recipient 1" },
+            { text: "Recipient 1" },
+            { text: "Recipient 1" },
+            { text: "Recipient 1" },
+            { text: "Recipient 1" },
+        ],
+        passwords: [
+
+        ],
+    } },
+    methods: {
+        on_add_recipient(){
+
+        },
+        on_add_password(){
+            alert('pwd');
+        }
+    },
     components: {
-        TwoColumnLayout
+        TwoColumnAddDeleteList,
     }
 }
 </script>

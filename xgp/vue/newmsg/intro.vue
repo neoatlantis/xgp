@@ -36,5 +36,4 @@
     <strong>{{$t('SIGNATURE')}}</strong> {{$t("P3")}}
     <p />
     {{$t("P4")}}
-
 </template>
