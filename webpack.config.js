@@ -74,9 +74,19 @@ module.exports = (env)=>{
                 }),
                 new CspHtmlWebpackPlugin({
                     'script-src': '',
-                    'style-src': ''
+                    'style-src': '',
                 }, {
-                    enabled: !is_dev,
+                    enabled: false, // TODO !is_dev,
+
+                    policy: {
+                        'script-src': [
+                            'self',
+                        ],
+                        'style-src': [
+                            'unsafe-inline',
+                            'self',
+                        ]
+                    },
 
                     hashingMethod: 'sha256',
                     hashEnabled: {
