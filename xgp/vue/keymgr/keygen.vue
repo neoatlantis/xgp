@@ -9,6 +9,9 @@
     display:table-cell;
     margin-bottom: 5px;
 }
+.result_textarea{
+    width: 100%; height: 100%; resize: none; font-family: monospace;
+}
 </style>
 <template><div style="width:100%">
 
@@ -69,7 +72,7 @@ with anyone you wish to establish contact.
     Your new key pair was just generated.
     <p />
 
-    <section class="tabs" style="max-width: 500px">
+    <section class="tabs" style="width: 100%">
         <menu role="tablist" aria-label="Sample Tabs">
             <button role="tab" @click="result_tab=0" aria-controls="tab-keygen-private-key" :aria-selected="0==result_tab">Private Key</button>
             <button role="tab" @click="result_tab=1" aria-controls="tab-keygen-public-key"  :aria-selected="1==result_tab">Public Key</button>
@@ -77,15 +80,15 @@ with anyone you wish to establish contact.
         </menu>
 
         <article role="tabpanel" id="tab-keygen-private-key" :hidden="0!=result_tab">
-            <pre>{{ privateKey }}</pre>
+            <textarea rows="10" readonly :class="$style.result_textarea" v-model="privateKey"></textarea>
         </article>
 
         <article role="tabpanel" id="tab-keygen-public-key" :hidden="1!=result_tab">
-            <pre>{{ publicKey }}</pre>
+            <textarea rows="10" readonly :class="$style.result_textarea" v-model="publicKey"></textarea>
         </article>
 
         <article role="tabpanel" id="tab-keygen-revocation-cert" :hidden="2!=result_tab">
-            <pre>{{ revocationCertificate }}</pre>
+            <textarea rows="10" readonly :class="$style.result_textarea" v-model="revocationCertificate"></textarea>
         </article>
 
     </section>
