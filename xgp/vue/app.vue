@@ -1,5 +1,6 @@
 <template>
 <div>
+    <Bsod></Bsod>
     <Desktop @start="on_desktop_start" ></Desktop>
     <PasswordPrompt></PasswordPrompt>
     <div>
@@ -14,6 +15,7 @@
 
 
 <script>
+import Bsod from "./windows/bsod.vue";
 import Desktop from "./desktop.vue";
 import PasswordPrompt from "./windows/password-prompt.vue";
 import Keymgr from "./keymgr/index.vue";
@@ -23,6 +25,7 @@ import Doc from "./doc/index.vue";
 export default {
 
     components: {
+        Bsod,
         Desktop,
         PasswordPrompt,
         Keymgr,

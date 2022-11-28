@@ -1,40 +1,50 @@
-<template><div>
+<style module>
+.table{
+    display:table;
+}
+.tr{
+    display:table-row;
+}
+.td{
+    display:table-cell;
+    margin-bottom: 5px;
+}
+</style>
+<template><div style="width:100%">
+
+<strong>Generating a new keypair...</strong>
+<p />
+<div>
+You can generate a new pair of public and private keys, and share the public key
+with anyone you wish to establish contact.
+</div>
+<p />
 
 <!-- Input form for new key -->
-<form v-show="!generated" action="#" @submit.prevent="on_submit">
-    <div class="form-group row">
-        <label class="col-sm-4 col-form-label">Name</label>
-        <div class="col-sm-8">
-            <input v-model="username" type="text" class="form-control">
-        </div>
+<form v-show="!generated" action="#" @submit.prevent="on_submit" :class="$style.table">
+    <div class="field-row" :class="$style.tr">
+        <label for="keygen-username" :class="$style.td">Username</label>
+        <input v-model="username" :class="$style.td" id="keygen-username" type="text">
     </div>
-    <div class="form-group row">
-        <label class="col-sm-4 col-form-label">Email</label>
-        <div class="col-sm-8">
-            <input v-model="email" type="email" class="form-control">
-        </div>
+    <div class="field-row" :class="$style.tr">
+        <label for="keygen-email" :class="$style.td">Email</label>
+        <input v-model="email" :class="$style.td" id="keygen-email" type="email">
     </div>
-    <div class="form-group row">
-        <label class="col-sm-4 col-form-label">Password</label>
-        <div class="col-sm-4">
-            <input v-model="password" type="password" class="form-control" id="inputPassword">
-        </div>
-        <div class="col-sm-4">
-            <input v-model="password2" type="password" class="form-control" :class='{"is-invalid":!password_match}' id="inputPassword2" placeholder="Repeat your password here">
-            <div class="invalid-feedback" v-if="!password_match">
-                Password mismatch.
-            </div>
-        </div>
+    <div class="field-row" :class="$style.tr">
+        <label for="keygen-password" :class="$style.td">Password</label>
+        <input v-model="password" :class="$style.td" id="keygen-password" type="password">
     </div>
-    <div class="form-group row">
-        <label for="inputAlgorithm" class="col-sm-4 col-form-label">Algorithm</label>
-        <div class="col-sm-8">
-            <select v-model="algorithm" id="inputAlgorithm" class="form-control">
-                <option value="ecc:curve25519">Curve25519</option>
-                <option value="rsa:4096">RSA 4096-bits</option>
-                <option value="rsa:2048">RSA 2048-bits</option>
-            </select>
-        </div>
+    <div class="field-row" :class="$style.tr">
+        <label for="keygen-password2" :class="$style.td">Repeat Password</label>
+        <input v-model="password2" :class="$style.td" id="keygen-password2" type="password">
+    </div>
+    <div class="field-row" :class="$style.tr">
+        <label for="keygen-algorithm" :class="$style.td">Algorithm</label>
+        <select v-model="algorithm" id="keygen-algorithm" :class="$style.td">
+            <option value="ecc:curve25519">Curve25519</option>
+            <option value="rsa:4096">RSA 4096-bits</option>
+            <option value="rsa:2048">RSA 2048-bits</option>
+        </select>
     </div>
 
     <div class="form-group">

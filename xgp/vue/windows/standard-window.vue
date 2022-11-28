@@ -13,7 +13,7 @@
         left  : maximized ? `0` : `${window_x}px`,
         top   : maximized ? `0` : `${window_y}px`,
         width : maximized ? `100%` : (minimized ? `30em` : this.normal_width ),
-        height: maximized ? `100%` : undefined,
+        height: maximized ? `100%` : (minimized ? undefined : this.normal_height),
         "z-index": has_focus ? this.z_index+10 : this.z_index,
     }'
     ref="window"
@@ -37,7 +37,7 @@
         class="window-body"
         v-show="!minimized"
         :style='{
-            height: maximized ? `calc(100% - 35px)` : `100%`,
+            height: maximized ? `calc(100% - 35px)` : (this.normal_height ? `calc(${this.normal_height} - 35px)` : `100%`),
             width : `calc(100% - 12px)`,
         }'
     >
@@ -61,6 +61,9 @@ export default {
         normal_width: {
             type: String,
             default: "30em",
+        },
+        normal_height: {
+            default: undefined,
         },
         maximize_button: {
             type: Boolean,
