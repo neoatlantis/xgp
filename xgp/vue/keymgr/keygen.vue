@@ -34,14 +34,6 @@ with anyone you wish to establish contact.
         <input v-model="email" :class="$style.td" id="keygen-email" type="email">
     </div>
     <div class="field-row" :class="$style.tr">
-        <label for="keygen-password" :class="$style.td">Password</label>
-        <input v-model="password" :class="$style.td" id="keygen-password" type="password">
-    </div>
-    <div class="field-row" :class="$style.tr">
-        <label for="keygen-password2" :class="$style.td">Repeat Password</label>
-        <input v-model="password2" :class="$style.td" id="keygen-password2" type="password">
-    </div>
-    <div class="field-row" :class="$style.tr">
         <label for="keygen-algorithm" :class="$style.td">Algorithm</label>
         <select v-model="algorithm" id="keygen-algorithm" :class="$style.td">
             <option value="ecc:curve25519">Curve25519</option>
@@ -110,8 +102,6 @@ export default {
     data(){ return {
         username: "",
         email: "",
-        password: "",
-        password2: "",
         algorithm: "ecc:curve25519",
         save_after_generation: true,
 
@@ -123,12 +113,6 @@ export default {
         revocationCertificate: "",
 
     } },
-
-    computed: {
-        password_match(){
-            return this.password == this.password2;
-        },
-    },
 
     methods: {
         reset(){

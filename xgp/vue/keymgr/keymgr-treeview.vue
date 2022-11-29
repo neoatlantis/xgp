@@ -16,8 +16,13 @@
 </ul>
 </template>
 <script>
+import keyring from "xgp/keyring";
+
 export default {
 
+    data(){ return {
+
+    } }
 
 }
 </script>

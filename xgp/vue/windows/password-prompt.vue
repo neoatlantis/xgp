@@ -34,9 +34,23 @@
     <Headline>Please input your password.</Headline>
     <hr />
 
-    <div>
+    <div v-if="'keyring'==context">
+        <span v-if="require_repeat">
+            Before using XGP, the keyring must be initialized with a personal
+            password. Please choose a strong password and continue.
+        </span>
+        <span v-else>
+            Please input your password to unlock keyring.
+        </span>
+    </div>
+    <div v-else>
         Please choose a secure password for encrypting message.
     </div>
+
+    <div v-if="previous_invalid_password" style="color:red">
+        Invalid password, please try again.
+    </div>
+    
     <p />
 
 
@@ -75,8 +89,10 @@ export default {
     },
 
     data(){ return {
+        context: null,
         visible: false,
         require_repeat: false,
+        previous_invalid_password: false,
         password: "",
         password2: "",
     } },
@@ -89,13 +105,17 @@ export default {
 
         prompt({
             require_repeat,
+            context,
+            previous_invalid_password=false,
         }){
             if(this.visible){
                 $desktop$.publish("password.error", "busy");
                 return;
             }
             // init
+            this.context = context;
             this.require_repeat = require_repeat;
+            this.previous_invalid_password = previous_invalid_password;
 
             this.visible = true;
         },
@@ -114,7 +134,11 @@ export default {
     computed: {
         maybe_ok(){
             if(this.password == "") return false;
-            return this.password == this.password2;
+            if(this.require_repeat){
+                return this.password == this.password2;
+            } else {
+                return true;
+            }
         }
     },
 

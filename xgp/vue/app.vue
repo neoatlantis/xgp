@@ -1,8 +1,9 @@
 <template>
 <div>
-    <Bsod></Bsod>
-    <Desktop @start="on_desktop_start" ></Desktop>
     <PasswordPrompt></PasswordPrompt>
+    <Bsod></Bsod>
+    <Keyring></Keyring>
+    <Desktop @start="on_desktop_start" ></Desktop>
     <div>
         <Keymgr ref="keymgr"></Keymgr>
         <Newmsg ref="newmsg"></Newmsg>
@@ -16,6 +17,7 @@
 
 <script>
 import Bsod from "./windows/bsod.vue";
+import Keyring from "./keyring.vue";
 import Desktop from "./desktop.vue";
 import PasswordPrompt from "./windows/password-prompt.vue";
 import Keymgr from "./keymgr/index.vue";
@@ -26,6 +28,7 @@ export default {
 
     components: {
         Bsod,
+        Keyring,
         Desktop,
         PasswordPrompt,
         Keymgr,
