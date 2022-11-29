@@ -4,6 +4,9 @@ import { encode, decode } from "@msgpack/msgpack";
 import _ from "lodash";
 import * as openpgp from "openpgp";
 import nacl from "tweetnacl";
+import { v4 as uuidv4 } from 'uuid';
+
+
 
 function nacl_encrypt(key, message){
     let nonce = nacl.randomBytes(nacl.secretbox.nonceLength);
@@ -130,11 +133,20 @@ class Keyring {
     }
 
     async generate(opts){
-
+        // generates a new pair of PGP key, adds them to keyring, and returns
+        // the public key part.
     }
 
-    async save(id, value, opts){
-
+    async save(id, key, opts){
+        if(!this.is_unlocked) throw Error("Keyring locked.");
+        if(_.isNil(id)){
+            id = uuidv4();
+        }
+        await this.#driver.setItem(id, encode({
+            opts,
+            encrypted: this.#masterlock.encrypt(value),
+        }));
+        return id;
     }
 
     async read(id){
