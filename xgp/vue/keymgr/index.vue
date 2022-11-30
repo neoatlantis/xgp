@@ -14,6 +14,9 @@
 <div style="height:100%; display: flex">
 
         <div :class="$style.col_left">
+            <div>
+                <button @click="refresh_keyring">&#128472; Refresh</button>
+            </div>
             <KeymgrTreeview></KeymgrTreeview>
         </div>
         <div style="padding: 10px; flex-grow:1">
@@ -55,6 +58,9 @@
 </StandardWindow></template>
 <script>
 
+import keyring from "xgp/keyring";
+import { $desktop$ } from "xgp/channels";
+
 import StandardWindow from "sfc/windows/standard-window.vue";
 import TwoColumnLayout from "sfc/windows/two-column-layout.vue";
 import KeymgrTreeview from "./keymgr-treeview.vue";
@@ -74,7 +80,11 @@ export default {
     methods: {
         start(){
             this.$refs["window"].show();
-        }
+        },
+
+        refresh_keyring(){
+            $desktop$.publish("do.keyring.refresh");
+        },
     },
 
     computed: {

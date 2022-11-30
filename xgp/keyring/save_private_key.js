@@ -56,6 +56,7 @@ export default async function save_private_key(private_key, passphrase){
     let entry_id = uuidv4();
     let entry_value = this.serialize({
         // TODO save brief information about key
+        brief: await this.briefing(decrypted_private_key),
         private: await this.crypto.encrypt(decrypted_private_key.write()),
     })
     await this.driver.setItem(entry_id, entry_value);

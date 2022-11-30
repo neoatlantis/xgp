@@ -6,8 +6,12 @@ import { Buffer } from "buffer";
 
 import SymmetricBox from "./SymmetricBox";
 
+import { $desktop$ } from "xgp/channels";
+
 import save_private_key         from "./save_private_key";
 import generate                 from "./generate";
+import briefing                 from "./briefing";
+import refresh_cache            from "./refresh_cache";
 
 
 
@@ -23,11 +27,19 @@ class Keyring {
 
     crypto = null;
 
+    cache;
+
     constructor(localStorageAlike){
         this.driver = localStorageAlike;
 
         this.save_private_key = save_private_key.bind(this);
         this.generate = generate.bind(this);
+        this.briefing = briefing.bind(this);
+        this.refresh_cache = refresh_cache.bind(this);
+
+
+
+        $desktop$.subscribe("do.keyring.refresh", ()=>this.refresh_cache());
     }
 
     is_unlocked(){
@@ -51,10 +63,11 @@ class Keyring {
         if(_.isNil(previous_header)){
             this.driver.setItem("HEADER", this.crypto.toString());
         }
+
+        this.refresh_cache();
     }
 
     serialize(obj){
-        console.log("serialize", obj);
         return Buffer.from(encode(obj)).toString("base64");
     }
 
