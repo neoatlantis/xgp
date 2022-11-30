@@ -50,7 +50,7 @@
     <div v-if="previous_invalid_password" style="color:red">
         Invalid password, please try again.
     </div>
-    
+
     <p />
 
 
@@ -95,6 +95,10 @@ export default {
         previous_invalid_password: false,
         password: "",
         password2: "",
+        /// if DEV
+        password: "test",
+        password2: "test",
+        /// endif
     } },
 
     methods: {
