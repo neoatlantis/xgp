@@ -71,20 +71,23 @@ class SymmetricBox {
         return this;
     }
 
+    // encrypt: msgpack object -> buffer
     async encrypt(value){
         if(_.isNil(this.#secret)) throw Error("SymmetricBox not ready.");
         let plainbuffer = encode(value);
-        return Buffer.from(nacl_encrypt(
+        let encrypted = nacl_encrypt(
             this.#secret.slice(0, nacl.secretbox.keyLength),
             plainbuffer
-        )).toString("base64");
+        );
+        return encrypted;
     }
 
+    // decrypt: buffer -> msgpack object
     async decrypt(value){
         if(_.isNil(this.#secret)) throw Error("SymmetricBox not ready.");
         return nacl_decrypt(
             this.#secret.slice(0, nacl.secretbox.keyLength),
-            Buffer.from(value, "base64")
+            value
         );
     }
 

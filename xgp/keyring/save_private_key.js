@@ -6,6 +6,8 @@
  * @passphrase: String
  *   a passphrase for unlocking the private key.
  */
+import * as openpgp from "openpgp";
+import { v4 as uuidv4 } from 'uuid';
 
 export default async function save_private_key(private_key, passphrase){
     this.assure_unlocked();
@@ -52,9 +54,11 @@ export default async function save_private_key(private_key, passphrase){
 
     // now we have a decrypted private key
     let entry_id = uuidv4();
-    await this.driver.setItem(entry_id, encode({
-        private: this.crypto.encrypt(value),
-    }));
+    let entry_value = this.serialize({
+        // TODO save brief information about key
+        private: await this.crypto.encrypt(decrypted_private_key.write()),
+    })
+    await this.driver.setItem(entry_id, entry_value);
     return entry_id;
 
 }

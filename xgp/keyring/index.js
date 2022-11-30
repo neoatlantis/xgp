@@ -1,10 +1,13 @@
 import _ from "lodash";
 import * as openpgp from "openpgp";
 import { v4 as uuidv4 } from 'uuid';
+import { encode, decode } from "@msgpack/msgpack";
+import { Buffer } from "buffer";
 
 import SymmetricBox from "./SymmetricBox";
 
-import save_private_key from "./save_private_key";
+import save_private_key         from "./save_private_key";
+import generate                 from "./generate";
 
 
 
@@ -24,6 +27,7 @@ class Keyring {
         this.driver = localStorageAlike;
 
         this.save_private_key = save_private_key.bind(this);
+        this.generate = generate.bind(this);
     }
 
     is_unlocked(){
@@ -49,18 +53,17 @@ class Keyring {
         }
     }
 
-    async reencrypt(newpassword){
-
+    serialize(obj){
+        console.log("serialize", obj);
+        return Buffer.from(encode(obj)).toString("base64");
     }
 
-    async generate(opts){
-        this.assure_unlocked();
-        // generates a new pair of PGP key, adds them to keyring, and returns
-        // the public key part.
-        let { publicKey, privateKey } = await openpgp.generateKey(options);
-        await this.save_private_key(privateKey);
+    deserialize(b64){
+        return decode(Buffer.from(b64, "base64"));
+    }
 
-        return publicKey;
+    async reencrypt(newpassword){
+
     }
 
     async read(id){

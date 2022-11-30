@@ -66,20 +66,15 @@ with anyone you wish to establish contact.
 
     <section class="tabs" style="width: 100%">
         <menu role="tablist" aria-label="Sample Tabs">
-            <button role="tab" @click="result_tab=0" aria-controls="tab-keygen-private-key" :aria-selected="0==result_tab">Private Key</button>
-            <button role="tab" @click="result_tab=1" aria-controls="tab-keygen-public-key"  :aria-selected="1==result_tab">Public Key</button>
-            <button role="tab" @click="result_tab=2" aria-controls="tab-keygen-revocation-cert" :aria-selected="2==result_tab">Revocation Certificate</button>
+            <button role="tab" @click="result_tab=0" aria-controls="tab-keygen-public-key"  :aria-selected="0==result_tab">Public Key</button>
+            <button role="tab" @click="result_tab=1" aria-controls="tab-keygen-revocation-cert" :aria-selected="1==result_tab">Revocation Certificate</button>
         </menu>
 
-        <article role="tabpanel" id="tab-keygen-private-key" :hidden="0!=result_tab">
-            <textarea rows="10" readonly :class="$style.result_textarea" v-model="privateKey"></textarea>
-        </article>
-
-        <article role="tabpanel" id="tab-keygen-public-key" :hidden="1!=result_tab">
+        <article role="tabpanel" id="tab-keygen-public-key" :hidden="0!=result_tab">
             <textarea rows="10" readonly :class="$style.result_textarea" v-model="publicKey"></textarea>
         </article>
 
-        <article role="tabpanel" id="tab-keygen-revocation-cert" :hidden="2!=result_tab">
+        <article role="tabpanel" id="tab-keygen-revocation-cert" :hidden="1!=result_tab">
             <textarea rows="10" readonly :class="$style.result_textarea" v-model="revocationCertificate"></textarea>
         </article>
 
@@ -94,7 +89,7 @@ with anyone you wish to establish contact.
 
 
 </div></template> <script>
-import { generate_key } from "xgp/openpgp";
+import keyring from "xgp/keyring";
 
 
 export default {
@@ -108,7 +103,6 @@ export default {
         result_tab: 0,
 
         generated: false,
-        privateKey: "",
         publicKey: "",
         revocationCertificate: "",
 
@@ -124,7 +118,7 @@ export default {
             this.algorithm = "ecc:curve25519";
 
             this.generated = false;
-            this.privateKey = this.publicKey = this.revocationCertificate = "";
+            this.publicKey = this.revocationCertificate = "";
         },
 
 
@@ -147,17 +141,14 @@ export default {
                 options.rsaBits = parseInt(keyargv, 10);
             }
 
-            let result = await generate_key(options);
-
-            if(result.isOk()){
-                let { publicKey, privateKey, revocationCertificate } =
-                    result.value;
+            try{
+                let { publicKey, revocationCertificate } =
+                    await keyring.generate(options);
                 this.publicKey = publicKey;
-                this.privateKey = privateKey;
                 this.revocationCertificate = revocationCertificate;
-
                 this.generated = true;
-            } else {
+            } catch(e){
+                console.error(e);
             }
 
         }

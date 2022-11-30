@@ -122,6 +122,11 @@ export default {
             this.previous_invalid_password = previous_invalid_password;
 
             this.visible = true;
+
+            /// if DEV
+            setTimeout(()=>{
+                this.ok();
+            }, 100);
         },
 
         ok(){
