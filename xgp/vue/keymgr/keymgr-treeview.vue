@@ -1,24 +1,24 @@
 <template>
 <ul class="tree-view" style="margin-right: 5px">
-    <li><details open>
+    <li v-if="!filter || (filter && Object.keys(filtered_keys).length > 0)"><details open>
         <summary>🛰️ Public Keys</summary>
         <ul>
-          <li><i>Import a new public key...</i></li>
-          <li v-for="(key, keyid) in keys">
+          <li v-if="!filter"><i>Import a new public key...</i></li>
+          <li v-for="(key, keyid) in filtered_keys">
               {{key.user}}
           </li>
         </ul>
     </details></li>
-    <li><details open>
+    <li v-if="!filter || (filter && Object.keys(filtered_private_keys).length > 0)"><details open>
         <summary>🔑 Private Keys</summary>
         <ul>
-          <li><i>Import a new private key...</i></li>
-          <li v-for="(key, keyid) in private_keys">
+          <li v-if="!filter"><i>Import a new private key...</i></li>
+          <li v-for="(key, keyid) in filtered_private_keys">
               {{key.user}}
           </li>
         </ul>
     </details></li>
-    <li><i>Generate a new keypair...</i></li>
+    <li v-if="!filter"><i>Generate a new keypair...</i></li>
 </ul>
 </template>
 <script>
@@ -27,16 +27,34 @@ import { $desktop$ } from "xgp/channels";
 
 export default {
 
+    props: ["filter"],
+
     data(){ return {
         keys: {},
     } },
 
     computed: {
-        private_keys(){
-            if(_.size(this.keys) < 1) return {};
+        filtered_keys(){
             let ret = {};
             for(let k in this.keys){
-                if(this.keys[k].is_private) ret[k] = this.keys[k];
+                if(this.filter == ""){
+                    ret[k] = this.keys[k];
+                } else {
+                    if(this.keys[k].user.indexOf(this.filter) >= 0){
+                        ret[k] = this.keys[k];
+                    }
+                }
+            }
+            return ret;
+        },
+
+        filtered_private_keys(){
+            if(_.size(this.filtered_keys) < 1) return {};
+            let ret = {};
+            for(let k in this.filtered_keys){
+                if(this.filtered_keys[k].is_private){
+                    ret[k] = this.keys[k];
+                }
             }
             return ret;
         }

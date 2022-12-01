@@ -14,10 +14,11 @@
 <div style="height:100%; display: flex">
 
         <div :class="$style.col_left">
-            <div>
+            <div style="display:flex">
                 <button @click="refresh_keyring">&#128472; Refresh</button>
+                <input type="text" v-model="keyring_treeview_filter" placeholder="Filter..." style="flex-grow:1"/>
             </div>
-            <KeymgrTreeview></KeymgrTreeview>
+            <KeymgrTreeview :filter="keyring_treeview_filter"></KeymgrTreeview>
         </div>
         <div style="padding: 10px; flex-grow:1">
             <Keygen ref="keygen"></Keygen>
@@ -74,6 +75,8 @@ export default {
         show_create: false,
         show_import: false,
         show_export: false,
+
+        keyring_treeview_filter: "",
 
     } },
 
